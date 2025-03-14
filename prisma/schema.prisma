@@ -1,0 +1,31 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model runner_tb{
+  runnerId              Int         @id                   @default(autoincrement())
+  runnerName            String      @db.VarChar(100)
+  runnerUsername        String      @db.VarChar(100)
+  runnerPassword        String      @db.VarChar(100)
+  runnerImage           String      @db.VarChar(150)
+}
+
+model run_tb{
+  runId                 Int         @id                   @default(autoincrement())
+  dateRun               String      @db.VarChar(100)
+  distanceRun           Float       @db.Float
+  placeRun              String      @db.VarChar(100)
+  runImage              String      @db.VarChar(150)
+  runnerId              Int
+}
