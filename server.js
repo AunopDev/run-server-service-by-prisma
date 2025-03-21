@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const runnerRoutes = require("./routes/runner.routes.js");
 const runRoutes = require("./routes/run.routes.js");
+const path = require("path");
 
 require("dotenv").config();
 
@@ -14,6 +15,10 @@ app.use(express.json()); // ใช้งาน express.json() สำหรับ
 
 app.use("/runner", runnerRoutes); // กำหนดเส้นทางการเข้าถึง resouces ใน Web Server
 app.use("/run", runRoutes); // กำหนดเส้นทางการเข้าถึง resouces ใน Web Server
+
+// app.use("/images/runner", express.static(path.join(__dirname, "images/runner"))); // กำหนดเส้นทางการเข้าถึง resouces ใน Web Server
+app.use("/images/runner", express.static( "images/runner")); // กำหนดเส้นทางการเข้าถึง resouces ใน Web Server
+app.use("/images/run", express.static( "images/run")); // กำหนดเส้นทางการเข้าถึง resouces ใน Web Server
 
 // เขียนคำสั่งเพื่อเทส เพื่อให้ client/user เข้าถึง resouces ใน Web Server
 app.get("/", (req, res) => {

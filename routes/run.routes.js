@@ -2,6 +2,7 @@
 
 const express = require("express");
 const runController = require("./../controllers/run.controller.js");
+const { route } = require("./runner.routes.js");
 
 const router = express.Router();
 
@@ -10,8 +11,14 @@ const router = express.Router();
 router.post("/", runController.uploadRun, runController.createRun);
 
 // แก้ไข
+router.put("/:runId", runController.uploadRun, runController.updateRunOfRunner);
 
-// ตรวจสอบชื่อผู้ใช้ รหัสผ่าน
+// ดึงข้อมูล
+router.get("/only/:runId", runController.getOneRunOfRunner);
+router.get("/:runnerId", runController.getAllRunOfRunner);
+
+// ลบ
+router.delete("/:runId", runController.deleteRunOfRunner);
 
 // export โมดูล router ออกไปใช้งาน server.js
 

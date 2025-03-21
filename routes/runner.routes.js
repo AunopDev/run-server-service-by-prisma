@@ -11,11 +11,8 @@ router.post("/", runnerController.uploadRunner, runnerController.createRunner);
 
 // แก้ไข
 
-
 // ตรวจสอบชื่อผู้ใช้ รหัสผ่าน
+router.get("/:runnerUsername/:runnerPassword", runnerController.checkLoginRunner);
 
 // export โมดูล router ออกไปใช้งาน server.js
-
-
-
 module.exports = router;

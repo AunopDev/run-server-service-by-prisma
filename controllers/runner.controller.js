@@ -38,7 +38,6 @@ exports.uploadRunner = multer({
   },
 }).single("runnerImage");
 
-
 // สร้างฟังก์ชั่นสำหรับการเพิ่มข้อมูลลงในตาราง runner_tb
 exports.createRunner = async (req, res) => {
   try {
@@ -65,3 +64,28 @@ exports.createRunner = async (req, res) => {
   }
 };
 
+// สร้างฟังก์ชั่นสำหรับตรวจสอบชื่อผู้ใช้ รหัสผ่าน
+exports.checkLoginRunner = async (req, res) => {
+  try {
+    const result = await prisma.runner_tb.findFirst({
+      where: {
+        runnerUsername: req.params.runnerUsername,
+        runnerPassword: req.params.runnerPassword,
+      },
+    });
+
+    if (result) {
+      res.status(200).json({
+        message: "Login successfully",
+        data: result,
+      });
+    } else {
+      res.status(404).json({
+        message: "Username or Password is incorrect",
+        data: result,
+      });
+    }
+  } catch (err) {
+    res.status(500).json({ message: `ERROR:  ${err}` });
+  }
+};
