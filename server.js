@@ -45,7 +45,7 @@ if (!isVercel) {
 // เขียนคำสั่งเพื่อเทส เพื่อให้ client/user เข้าถึง resouces ใน Web Server
 app.get("/", (req, res) => {
   res.json({
-    message: "Welcome to backend run server service",
+    message: "This is backend running server service by AunopDev",
     environment: process.env.VERCEL ? "Vercel" : "Development",
     timestamp: new Date().toISOString(),
   });
