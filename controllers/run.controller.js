@@ -1,5 +1,7 @@
 // จัดการเรื่อง อัปโหลดไฟล์ด้วย multer
 // จัดการเรื่องการทำงาน CRUD กับฐานข้อมูล โดย prisma
+const { v2: cloudinary } = require("cloudinary");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
 const multer = require("multer");
 const path = require("path");
@@ -8,19 +10,37 @@ const fs = require("fs");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
+cloudinary.config({
+  cloud_name: "ditnqhjjh",
+  api_key: "428626728889478",
+  api_secret: "WUeOczj0mvae4eXLObn_ZPc0du4",
+});
+
 //สร้างส่วนของการอัปโหลดไฟล์ด้วย multer ทำ 2 ขั้นตอน
 //1. กําหนดตําแหน่งที่จะอัปโหลดไฟล์ และชื่อไฟล์
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "images/run");
-  },
-  filename: (req, file, cb) => {
-    cb(
-      null,
-      "run_" +
-        Math.floor(Math.random() * Date.now()) +
-        path.extname(file.originalname)
-    );
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, "images/run");
+//   },
+//   filename: (req, file, cb) => {
+//     cb(
+//       null,
+//       "run_" +
+//         Math.floor(Math.random() * Date.now()) +
+//         path.extname(file.originalname)
+//     );
+//   },
+// });
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: async (req, file) => {
+    const newFileName = "runner_" + Math.floor(Math.random() * Date.now());
+
+    return {
+      folder: "images/runner", // โฟลเดอร์ใน Cloudinary
+      allowed_formats: ["jpg", "png"], // กำหนดประเภทไฟล์
+      public_id: newFileName,
+    };
   },
 });
 //2. ฟังก์ชันอัปโหลดไฟล์
@@ -46,7 +66,8 @@ exports.createRun = async (req, res) => {
         dateRun: req.body.dateRun,
         distanceRun: req.body.distanceRun,
         placeRun: req.body.placeRun,
-        runImage: req.file ? req.file.path.replace("images\\run\\", "") : "",
+        // runImage: req.file ? req.file.path.replace("images\\run\\", "") : "",
+        runnerImage: req.file ? req.file.path : "",
         runnerId: parseInt(req.body.runnerId),
       },
     });
